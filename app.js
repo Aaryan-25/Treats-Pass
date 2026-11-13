@@ -1,11 +1,28 @@
 (() => {
   const C = window.PASS_CONFIG;
   const $ = (id) => document.getElementById(id);
-  const KEY = { orders: "eats.orders", me: "eats.me", lastReply: "eats.lastReply" };
+  const KEY = { orders: "eats.orders", me: "eats.me", lastReply: "eats.lastReply", code: "eats.code", notes: "eats.notes" };
 
   // ---------- storage (wrapped: storage can throw in private mode) ----------
   const load = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+
+  // ---------- secret pass code (from the card's QR link, never from GitHub) ----------
+  const cleanCode = (v) => String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const fromLink = cleanCode(new URLSearchParams(location.hash.slice(1)).get("k"));
+  if (fromLink.length >= 8) save(KEY.code, fromLink);
+  let code = load(KEY.code, "");
+  // Only listen for Bhai's replies sent after this phone was set up (skips his test messages).
+  const markFreshStart = () => { if (!load(KEY.lastReply, null)) save(KEY.lastReply, String(Math.floor(Date.now() / 1000))); };
+  if (code) markFreshStart();
+  const topic = () => C.topicPrefix + code;
+  const replyTopic = () => C.topicPrefix + code + "-r";
+  const dataTopic = () => C.topicPrefix + code + "-d"; // structured copy for Bhai's Desk
+
+  const isStandalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  // iPhone keeps Safari and the home-screen app in separate storage, so ask for details only inside the installed app.
+  const needsInstall = isIOS && !isStandalone;
 
   let orders = load(KEY.orders, []);
   let me = load(KEY.me, { address: "", phone: "", upi: "" });
@@ -50,6 +67,7 @@
 
   const STATUS = {
     ok: ["Sent ♡", "ok"], over: ["Over budget", "over"],
+    ordered: ["Bhai ordered 🛵", "ok"], paid: ["Paid back ✅", "ok"],
     sent: ["Alert sent", "sos"], seen: ["Bhai's on it 🫶", "ok"],
   };
 
@@ -74,7 +92,17 @@
     }
   }
 
-  function renderAll() { $("holderName").textContent = C.holderName; renderMeter(); renderAddress(); renderHistory(); }
+  function renderNotes() {
+    const notes = load(KEY.notes, []);
+    const box = $("bhaiNote");
+    if (!notes.length) { box.hidden = true; return; }
+    const n = notes[notes.length - 1];
+    box.hidden = false;
+    $("bhaiNoteText").textContent = n.text;
+    $("bhaiNoteTime").textContent = new Date(n.ts).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  }
+
+  function renderAll() { $("holderName").textContent = C.holderName; renderMeter(); renderAddress(); renderNotes(); renderHistory(); }
 
   // ---------- settings ----------
   function openSettings() {
@@ -107,13 +135,23 @@
     const res = await fetch(C.ntfyServer, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: C.ordersTopic, ...payload }),
+      body: JSON.stringify({ topic: topic(), ...payload }),
     });
     if (!res.ok) throw new Error("ntfy " + res.status);
   }
 
+  // Quiet structured copy that Bhai's Desk reads (nobody gets a notification for it).
+  async function publishData(record) {
+    try {
+      await fetch(C.ntfyServer, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic: dataTopic(), message: JSON.stringify({ v: 1, ...record }) }),
+      });
+    } catch {}
+  }
+
   const replyAction = (label, body) => ({
-    action: "http", label, url: `${C.ntfyServer}/${C.replyTopic}`, method: "POST", body, clear: true,
+    action: "http", label, url: `${C.ntfyServer}/${replyTopic()}`, method: "POST", body, clear: true,
   });
 
   const upiLink = (amount) =>
@@ -128,6 +166,7 @@
 
     if (!link && !notes) return toast("Paste a link or write what you want");
     if (!amount || amount < 0) return toast("Add a rough amount");
+    if (!code) return askCode();
     if (mode === "order" && !me.address) { toast("Add your address first"); return openSettings(); }
 
     const spentBefore = budgetSpent();
@@ -147,6 +186,7 @@
     const actions = [];
     if (link) actions.push({ action: "view", label: "Open link", url: link });
     if (mode === "payback" && me.upi) actions.push({ action: "view", label: `Pay ${rupee(amount)}`, url: upiLink(amount) });
+    actions.push(mode === "payback" ? replyAction("Mark paid ✅", `status:${id}:paid`) : replyAction("I ordered it 🛵", `status:${id}:ordered`));
 
     const btn = $("sendBtn"); btn.disabled = true; btn.textContent = "Sending…";
     try {
@@ -158,7 +198,15 @@
         click: link || undefined,
         actions: actions.slice(0, 3),
       });
-      orders.push({ id, ts: Date.now(), kind: "order", amount, link, notes, mode, round: C.budgetRound, status: within ? "ok" : "over" });
+      const ts = Date.now();
+      await publishData({
+        id, ts, kind: "order", amount, link, notes, mode, over: !within,
+        spent: spentBefore + amount, budget: C.budget, round: C.budgetRound,
+        address: mode === "order" ? me.address : undefined,
+        phone: me.phone || undefined,
+        upi: mode === "payback" ? me.upi || undefined : undefined,
+      });
+      orders.push({ id, ts, kind: "order", amount, link, notes, mode, round: C.budgetRound, status: within ? "ok" : "over" });
       save(KEY.orders, orders);
       $("link").value = ""; $("amount").value = ""; $("notes").value = "";
       renderAll();
@@ -177,6 +225,7 @@
   });
 
   async function sendSOS() {
+    if (!code) return askCode();
     const id = uid();
     toast("Sending alert…");
     const loc = await getLocation();
@@ -189,7 +238,9 @@
         message: `Sent ${new Date().toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" })}${loc ? "\n📍 " + loc : ""}`,
         priority: 5, tags: ["rotating_light"], actions,
       });
-      orders.push({ id, ts: Date.now(), kind: "sos", status: "sent" });
+      const ts = Date.now();
+      await publishData({ id, ts, kind: "sos", loc: loc || undefined, phone: me.phone || undefined });
+      orders.push({ id, ts, kind: "sos", status: "sent" });
       save(KEY.orders, orders); renderHistory();
       toast("Alert sent. Bhai's been notified 🚨");
       navigator.vibrate?.(200);
@@ -205,9 +256,10 @@
 
   // ---------- replies from Bhai ----------
   async function pollReplies() {
-    const since = load(KEY.lastReply, null) || "7d";
+    if (!code) return;
+    const since = load(KEY.lastReply, null) || "12h";
     try {
-      const res = await fetch(`${C.ntfyServer}/${C.replyTopic}/json?poll=1&since=${encodeURIComponent(since)}`);
+      const res = await fetch(`${C.ntfyServer}/${replyTopic()}/json?poll=1&since=${encodeURIComponent(since)}`);
       if (!res.ok) return;
       const text = await res.text();
       let changed = false;
@@ -216,12 +268,25 @@
         let m; try { m = JSON.parse(line); } catch { continue; }
         if (m.event !== "message") continue;
         save(KEY.lastReply, m.id);
-        const [verb, oid] = String(m.message || "").split(":");
+        const msg = String(m.message || "");
+        const verb = msg.split(":")[0];
+        if (verb === "note") {
+          const notes = load(KEY.notes, []);
+          notes.push({ ts: (m.time || Date.now() / 1000) * 1000, text: msg.slice(5).trim() });
+          save(KEY.notes, notes.slice(-10)); changed = true;
+          toast("New message from Bhai 💌");
+          continue;
+        }
+        const [, oid, value] = msg.split(":");
         const o = orders.find((x) => x.id === oid);
         if (!o) continue;
         if (verb === "seen" && o.status !== "seen") {
           o.status = "seen"; changed = true;
           toast("Bhai saw your alert. He's on it 🫶");
+        }
+        if (verb === "status" && (value === "ordered" || value === "paid") && o.status !== value) {
+          o.status = value; changed = true;
+          toast(value === "paid" ? "Bhai paid you back ✅" : "Bhai ordered it. Food's on the way 🛵");
         }
       }
       if (changed) { save(KEY.orders, orders); renderAll(); }
@@ -230,7 +295,18 @@
 
   // ---------- boot ----------
   renderAll();
-  if (!me.address) setTimeout(openSettings, 600);
+  function askCode() {
+    $("lock").showModal();
+    $("lockForm").onsubmit = (e) => {
+      const v = cleanCode($("lockCode").value);
+      if (v.length < 8) { e.preventDefault(); toast("That code looks too short"); return; }
+      code = v; save(KEY.code, code); markFreshStart(); pollReplies();
+      if (!me.address && !needsInstall) setTimeout(openSettings, 300);
+    };
+  }
+  if (needsInstall) $("installTip").hidden = false;
+  if (!code) askCode();
+  else if (!me.address && !needsInstall) setTimeout(openSettings, 600);
   pollReplies();
   setInterval(() => { if (document.visibilityState === "visible") pollReplies(); }, 15000);
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") pollReplies(); });

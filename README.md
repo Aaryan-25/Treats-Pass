@@ -8,7 +8,8 @@
 
 ## 2. Get notifications on your phone (~2 min)
 1. Install **ntfy** (App Store / Play Store).
-2. Tap **+**, then subscribe to the topic in `config.js` → `ordersTopic` (server: ntfy.sh).
+2. Tap **+**, then subscribe to `treats-` + your secret pass code (server: ntfy.sh).
+   The code is NOT in this repo on purpose. It only lives in the card's QR link and on her phone.
 3. Open the site yourself and send a test order to check it arrives. Then hold the alert button to test that too.
    - Within the budget: silent notification, no sound.
    - Past the budget: she can still order. You get a normal notification with a sound, marked "over budget".
@@ -16,13 +17,24 @@
    - On **iPhone**, allow ntfy *Time Sensitive* notifications so the alert breaks through Focus.
      On **Android**, open the topic's settings in ntfy and allow it to override Do Not Disturb.
 
-## 3. Print the card
-1. On a laptop, open `https://<your-username>.github.io/eats-pass/card.html` in Chrome.
+## 3. Your side: Bhai's Desk
+- Open `bhai.html` on your phone with your private link (desk key + her pass code), or open `bhai.html`
+  and type both once. Then **Add to Home Screen**. It installs as its own app, "Bhai's Desk".
+- It shows her orders, the budget used, and her alerts, and lets you reply: "I ordered it", "Paid",
+  "I'm on it", or any message. She sees replies in her app.
+- The desk key is NOT in this repo. Only its SHA-256 fingerprint is in `config.js`, so her pass code alone can't open the desk.
+- The desk keeps its own copy of orders on your phone. ntfy.sh only holds messages for about 12 hours,
+  so open the desk at least once in that window to capture every order in its history. Your ntfy app
+  still gets every notification either way.
+
+## 4. Print the card
+Use the ready-made print PDF. To make a new one (for example, after changing the pass code):
+1. On a laptop, open `card.html?code=YOURPASSCODE` on your site in Chrome. Without `code`, the QR won't carry her pass code.
 2. **Print → Save as PDF**, Margins: *None*, ✅ *Background graphics*.
 3. Give the 2-page PDF to a card printer (PVC, CR80 size, front + back). It includes a 3 mm bleed.
    The dashed red lines are guides and don't print.
 
-## 4. Muskan installs it
+## 5. Muskan installs it
 Scan the card → Safari opens it → **Share → Add to Home Screen**. She adds her address,
 phone and UPI ID once (they're saved only on her phone).
 
@@ -32,7 +44,7 @@ phone and UPI ID once (they're saved only on her phone).
 - **Names, topics:** edit `config.js` on GitHub. Her app picks it up next time she opens it.
 - **Move the app somewhere else:** replace `index.html` with a redirect. The printed QR keeps working:
   `<meta http-equiv="refresh" content="0; url=https://new-address">`
-- **Getting spam?** Change both topic names in `config.js` and re-subscribe in ntfy.
+- **Code leaked or getting spam?** Pick a new 8-character code, reprint the card's QR (`card.html?url=…&code=NEWCODE`) and re-subscribe in ntfy.
 
 Note: the "Pay ₹X" button opens UPI directly on Android. On iPhone, if it doesn't open your UPI app,
 copy her UPI ID from the notification text.

@@ -19,6 +19,12 @@
 <div class="bubbles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
 <main>
+  <!-- Shown in Safari before she installs it -->
+  <section class="panel install" id="installTip" hidden>
+    <h2 class="script">add me to your home screen</h2>
+    <p>Tap <b>Share</b> <span aria-hidden="true">⎋</span> at the bottom, then <b>Add to Home Screen</b>. Then open Treats Pass from your home screen and fill in your details there.</p>
+  </section>
+
   <!-- The pass -->
   <section class="pass" aria-label="Your pass">
     <div class="pass-top">
@@ -43,6 +49,13 @@
       <div class="meter-bar" id="meterBar"><div id="meterFill"></div></div>
       <p class="meter-note" id="meterNote" hidden></p>
     </div>
+  </section>
+
+  <!-- Latest message from Bhai -->
+  <section class="panel bhai-note" id="bhaiNote" hidden>
+    <span class="label-sm">from Bhai 💌</span>
+    <p id="bhaiNoteText"></p>
+    <span class="meta" id="bhaiNoteTime"></span>
   </section>
 
   <!-- Order -->
@@ -99,6 +112,17 @@
     <div class="sheet-actions">
       <button class="primary" id="saveSettings" value="save">Save</button>
     </div>
+  </form>
+</dialog>
+
+<!-- Pass code (only needed if the app opens without the card's link) -->
+<dialog id="lock">
+  <form method="dialog" class="sheet" id="lockForm">
+    <h2 class="script">hi Muskan ♡</h2>
+    <p class="hint">Type the pass code printed on the back of your card. You only do this once.</p>
+    <label class="field"><span>Pass code</span>
+      <input id="lockCode" type="text" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="xxxx-xxxx"></label>
+    <div class="sheet-actions"><button class="primary" value="ok">Open my pass</button></div>
   </form>
 </dialog>
 

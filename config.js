@@ -18,11 +18,15 @@ window.PASS_CONFIG = {
   // Show Muskan the budget bar?
   showLimitToHer: true,
 
-  // Secret ntfy channels. Subscribe to `ordersTopic` in the ntfy app on your
-  // phone. Keep these private; change them if you ever get spam.
-  ordersTopic: "muskan-eats-8532c74a5b11",
-  // Your "I'm on it" button on her alerts replies here; her app listens.
-  replyTopic: "muskan-eats-8532c74a5b11-reply",
+  // The secret pass code is NOT stored here (this file is public on GitHub).
+  // It lives only in the card's QR link (…/#k=CODE) and on her phone.
+  // Your ntfy topic = topicPrefix + CODE, e.g. "treats-abcd1234".
+  topicPrefix: "treats-",
+
+  // Bhai's Desk lock. Only a fingerprint (SHA-256) of your desk key is stored
+  // here, so the key itself can't be read from GitHub. Muskan's pass code
+  // alone can't open the desk.
+  deskKeyHash: "7806bbebb0ea4e39b6e5e957dae929b2559c03e63de2703573cb7f832102eed9",
 
   ntfyServer: "https://ntfy.sh",
 };

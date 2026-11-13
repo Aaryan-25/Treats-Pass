@@ -1,0 +1,35 @@
+/* Bhai's Desk: same family as her app, in Bombay Sapphire navy */
+body.desk{background:linear-gradient(170deg,#000B46 0%,#0a2a6b 55%,#0e4f8a 100%);background-attachment:scroll;color:#fff}
+html:has(body.desk){background:#0e4f8a}
+.desk .panel,.desk dialog{color:var(--navy)}
+.desk .panel{background:#fff}
+.desk-head{display:flex;justify-content:space-between;align-items:flex-end}
+.desk-head h1{margin:0;font-size:44px;line-height:1.05;color:#fff}
+.desk-head .pass-kicker{color:var(--blush)}
+.desk .icon-btn{background:rgba(255,255,255,.12);border:1.5px solid rgba(181,244,253,.35);color:var(--ice)}
+.sync{margin:-8px 0 0;font-size:12.5px;color:var(--ice);opacity:.8;font-weight:500}
+
+.desk .panel h2{font-size:28px}
+.link-btn{display:inline-block;margin-top:10px;font-size:13.5px;font-weight:700;color:#0089ab;text-decoration:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips button{border:1.5px solid var(--blush);background:#fff7f4;color:var(--copper);border-radius:99px;padding:8px 12px;font-size:13.5px;font-weight:700}
+
+.desk-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.desk-list li{border:1.5px solid #e8f3f6;background:#fbfeff;border-radius:18px;padding:13px}
+.o-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.o-amt{font-size:20px;font-weight:700}
+.o-time{font-size:12px;color:var(--muted);font-weight:500}
+.o-notes{margin:4px 0 0;font-size:14.5px}
+.o-line{margin:4px 0 0;font-size:13px;color:var(--muted);word-break:break-word}
+.o-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.o-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.o-actions a,.o-actions button{flex:1 1 auto;text-align:center;text-decoration:none;border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;border:1.5px solid var(--aqua);background:#fff;color:#0089ab}
+.o-actions .done{background:linear-gradient(135deg,var(--rose),var(--orange));border:0;color:#fff}
+.o-actions .done[disabled]{background:#e0f8fd;color:#007894}
+
+.alert-card{background:#fff;border:2px solid var(--red);border-radius:22px;padding:16px;margin-bottom:4px;color:var(--navy)}
+.alert-card h3{margin:0;color:var(--red);font-size:18px}
+.alert-card .o-actions .done{background:var(--red)}
+
+.desk-foot{display:flex;justify-content:space-between;gap:10px}
+.text-btn{background:none;border:0;color:var(--ice);font-size:13px;font-weight:600;text-decoration:underline;opacity:.85}

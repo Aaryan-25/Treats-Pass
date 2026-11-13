@@ -43,7 +43,8 @@
   .qr{position:absolute;right:8.5mm;top:9.5mm;width:33mm;height:33mm;background:#fff;border-radius:4mm;padding:3mm;
       box-shadow:0 0 0 .5mm var(--ice), 0 0 0 1.2mm #fff, 0 0 0 1.55mm var(--rose)}
   .qr svg{width:100%;height:100%;display:block}
-  .qr-cap{position:absolute;right:8.5mm;width:33mm;top:45mm;text-align:center;font-size:2.2mm;font-weight:700;letter-spacing:.3mm;color:var(--copper)}
+  .qr-cap{position:absolute;right:8.5mm;width:33mm;top:44.6mm;text-align:center;font-size:2.2mm;font-weight:700;letter-spacing:.3mm;color:var(--copper);line-height:1.35}
+  .qr-cap span{display:block;font-size:1.7mm;font-weight:600;letter-spacing:.2mm;color:#8a7f88}
 </style>
 </head>
 <body>
@@ -95,7 +96,7 @@
   <span class="heart" style="left:43mm;bottom:15mm;font-size:2.2mm">♥</span>
   <span class="bub" style="left:41.5mm;bottom:19mm;width:1.4mm;height:1.4mm"></span>
   <div class="qr" id="qr"></div>
-  <div class="qr-cap">scan me ♡</div>
+  <div class="qr-cap">scan me ♡<span id="codeTxt"></span></div>
   <div class="guide"></div>
 </section>
 
@@ -104,7 +105,9 @@
   // The QR points to this site (the folder card.html lives in) unless ?url= is given.
   const params = new URLSearchParams(location.search);
   const here = location.href.split(/[?#]/)[0].replace(/card\.html$/, "");
-  const url = params.get("url") || here;
+  const code = (params.get("code") || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const url = (params.get("url") || here) + (code ? "#k=" + code : "");
+  if (code) document.getElementById("codeTxt").textContent = "pass code · " + code.slice(0, 4) + "-" + code.slice(4);
   const qr = qrcode(0, "M"); qr.addData(url); qr.make();
   const n = qr.getModuleCount();
   let d = "";

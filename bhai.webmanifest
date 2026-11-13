@@ -1,0 +1,15 @@
+{
+  "id": "bhai-desk",
+  "name": "Bhai's Desk",
+  "short_name": "Bhai's Desk",
+  "start_url": "bhai.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000B46",
+  "theme_color": "#000B46",
+  "icons": [
+    { "src": "icons/desk-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/desk-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/desk-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

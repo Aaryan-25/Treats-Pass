@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Bhai's Desk</title>
+<meta name="theme-color" content="#000B46">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bhai's Desk">
+<link rel="manifest" href="bhai.webmanifest">
+<link rel="apple-touch-icon" href="icons/desk-apple-touch-icon.png">
+<link rel="icon" href="icons/desk-192.png">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="bhai.css">
+</head>
+<body class="desk">
+<main id="app" hidden>
+  <header class="desk-head">
+    <div>
+      <span class="pass-kicker">Muskan's treats</span>
+      <h1 class="script">Bhai's Desk</h1>
+    </div>
+    <button class="icon-btn" id="refreshBtn" aria-label="Refresh">↻</button>
+  </header>
+  <p class="sync" id="syncText">Not synced yet</p>
+
+  <!-- Unanswered alerts -->
+  <section id="alerts"></section>
+
+  <!-- Budget -->
+  <section class="panel">
+    <div class="meter-row"><span>Budget used</span><strong id="budgetText">₹0 / ₹0</strong></div>
+    <div class="meter-bar" id="budgetBar"><div id="budgetFill"></div></div>
+    <p class="hint" id="budgetHint"></p>
+    <a class="link-btn" id="editConfig" target="_blank" rel="noopener">Change or refresh budget on GitHub ↗</a>
+  </section>
+
+  <!-- Message her -->
+  <section class="panel">
+    <h2 class="script">message Muskan</h2>
+    <div class="chips" id="chips"></div>
+    <div class="paste-row">
+      <input id="noteInput" type="text" maxlength="300" placeholder="Write something…">
+      <button class="ghost" id="noteSend">Send</button>
+    </div>
+    <p class="hint">She sees it next time she opens her app (within about 12 hours).</p>
+  </section>
+
+  <!-- Orders -->
+  <section class="panel">
+    <h2 class="script">her orders</h2>
+    <ul class="desk-list" id="orders"></ul>
+  </section>
+
+  <section class="desk-foot">
+    <button class="text-btn" id="clearBtn">Clear history on this phone</button>
+    <button class="text-btn" id="lockBtn">Lock this desk</button>
+  </section>
+</main>
+
+<dialog id="lock">
+  <form method="dialog" class="sheet" id="lockForm">
+    <h2 class="script">Bhai's Desk</h2>
+    <p class="hint">Only for you. Enter your desk key and Muskan's pass code once on this phone.</p>
+    <label class="field"><span>Desk key</span>
+      <input id="deskKey" type="password" autocapitalize="off" autocomplete="off" spellcheck="false"></label>
+    <label class="field"><span>Muskan's pass code (from her card)</span>
+      <input id="passCode" type="text" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="xxxx-xxxx"></label>
+    <div class="sheet-actions"><button class="primary" value="ok">Open desk</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="bhai.js"></script>
+</body>
+</html>
