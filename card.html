@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Muskan's Treats Pass: printable card</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  /* Standard card 85.6 × 54 mm + 3 mm bleed on every side. Keep text inside the dashed red safe line. */
+  @page { size: 91.6mm 60mm; margin: 0; }
+  :root{
+    --ice:#B5F4FD; --aqua:#00C3F2; --navy:#000B46;          /* Bombay Sapphire */
+    --blush:#FFDED5; --rose:#DF8372; --copper:#87270C;     /* Bombay Sapphire copper accents */
+    --orange:#ff7a1a; --gold:#ffb347;                       /* goldfish */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#d9d9d9;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-family:Quicksand,sans-serif;display:flex;flex-direction:column;align-items:center;gap:8mm;padding:8mm;color:var(--navy)}
+  @media print{ body{background:none;padding:0;gap:0} .face{break-after:page} .guide{display:none} }
+  .face{position:relative;width:91.6mm;height:60mm;overflow:hidden}
+  .guide{position:absolute;inset:3mm;border-radius:3.2mm;outline:.2mm dashed rgba(255,0,0,.5);pointer-events:none;z-index:9}
+  .script{font-family:"Dancing Script",cursive;font-weight:700}
+  .bub{position:absolute;border:.3mm solid rgba(0,195,242,.55);border-radius:50%;background:rgba(255,255,255,.35)}
+  .heart{position:absolute;color:var(--rose);line-height:1}
+  .frame{position:absolute;inset:5.2mm;border:.4mm dashed rgba(223,131,114,.7);border-radius:3mm}
+
+  /* FRONT */
+  .front{background:
+      radial-gradient(circle at 82% 22%, rgba(255,255,255,.9), transparent 38%),
+      linear-gradient(160deg, var(--ice) 0%, #e8fcff 48%, var(--blush) 100%);}
+  .front .kick{position:absolute;left:8.5mm;top:9mm;font-size:2.3mm;font-weight:700;letter-spacing:.35mm;text-transform:lowercase;color:var(--rose)}
+  .front .name{position:absolute;left:8mm;top:12.5mm;font-size:13.5mm;line-height:1.1;color:var(--navy)}
+  .front .tag{position:absolute;left:8.8mm;top:29.5mm;font-size:2.9mm;font-weight:600;color:var(--copper)}
+  .front .love{position:absolute;right:9mm;bottom:8mm;font-size:5mm;color:var(--rose)}
+  .front .fish{position:absolute;right:8.5mm;top:15mm;width:31mm;transform:rotate(-8deg)}
+  .wave{position:absolute;left:0;bottom:0;width:100%;height:9mm}
+
+  /* BACK */
+  .back{background:linear-gradient(200deg, #ffffff 0%, var(--blush) 100%)}
+  .back .hey{position:absolute;left:9mm;top:9.5mm;font-size:9mm;line-height:1;color:var(--navy)}
+  .back .msg{position:absolute;left:9.2mm;top:21mm;width:38mm;font-size:2.75mm;line-height:1.5;font-weight:600;color:#3a3f63}
+  .back .sign{position:absolute;left:9mm;bottom:8.5mm;font-size:4.6mm;color:var(--rose)}
+  .back .mini{position:absolute;left:30mm;bottom:8mm;width:11mm;transform:rotate(6deg)}
+  .qr{position:absolute;right:8.5mm;top:9.5mm;width:33mm;height:33mm;background:#fff;border-radius:4mm;padding:3mm;
+      box-shadow:0 0 0 .5mm var(--ice), 0 0 0 1.2mm #fff, 0 0 0 1.55mm var(--rose)}
+  .qr svg{width:100%;height:100%;display:block}
+  .qr-cap{position:absolute;right:8.5mm;width:33mm;top:45mm;text-align:center;font-size:2.2mm;font-weight:700;letter-spacing:.3mm;color:var(--copper)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="goldfish" viewBox="0 0 140 90">
+      <path d="M100 45 C112 30 124 14 138 8 C132 26 130 36 134 45 C130 54 132 64 138 82 C124 76 112 60 100 45Z" fill="#ffb347"/>
+      <path d="M112 30 C120 22 128 16 136 12 M112 60 C120 68 128 74 136 78" stroke="#ff7a1a" stroke-width="2" fill="none" opacity=".55"/>
+      <path d="M44 16 C56 0 78 2 84 18 C70 16 56 18 44 16Z" fill="#ffb347"/>
+      <ellipse cx="60" cy="46" rx="46" ry="30" fill="#ff7a1a"/>
+      <path d="M58 68 C62 84 76 84 80 70Z" fill="#ffb347"/>
+      <path d="M74 20 C84 36 84 56 74 72" stroke="#ffb347" stroke-width="3.5" fill="none" opacity=".75"/>
+      <path d="M86 26 C92 38 92 54 86 66" stroke="#ffb347" stroke-width="2.5" fill="none" opacity=".5"/>
+      <ellipse cx="26" cy="52" rx="7" ry="4.2" fill="#DF8372" opacity=".55"/>
+      <circle cx="34" cy="38" r="8.5" fill="#fff"/><circle cx="32.4" cy="38.6" r="5" fill="#000B46"/><circle cx="30.6" cy="36.4" r="1.8" fill="#fff"/>
+      <path d="M27 29 L24 26 M31 28 L30 24.5 M35.5 28.5 L36 25" stroke="#000B46" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M15 50 C19 54 24 53.5 26 49.5" stroke="#000B46" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- FRONT -->
+<section class="face front">
+  <svg class="wave" viewBox="0 0 200 20" preserveAspectRatio="none">
+    <path d="M0 9 Q12 3 25 9 T50 9 T75 9 T100 9 T125 9 T150 9 T175 9 T200 9 V20 H0Z" fill="#00C3F2" opacity=".18"/>
+    <path d="M0 13 Q12 8 25 13 T50 13 T75 13 T100 13 T125 13 T150 13 T175 13 T200 13 V20 H0Z" fill="#00C3F2" opacity=".18"/>
+  </svg>
+  <div class="frame"></div>
+  <div class="kick">a lifetime treats pass for</div>
+  <div class="name script" id="holder">Muskan</div>
+  <div class="tag">eat anything, anytime ♡</div>
+  <svg class="fish" viewBox="0 0 140 90"><use href="#goldfish"/></svg>
+  <span class="bub" style="right:40.5mm;top:17mm;width:2.4mm;height:2.4mm"></span>
+  <span class="bub" style="right:42.5mm;top:13mm;width:1.5mm;height:1.5mm"></span>
+  <span class="heart" style="right:40mm;top:9.6mm;font-size:2.6mm">♥</span>
+  <span class="heart" style="right:12mm;top:9mm;font-size:2mm;opacity:.6">♥</span>
+  <div class="love script">love, Bhai</div>
+  <div class="guide"></div>
+</section>
+
+<!-- BACK -->
+<section class="face back">
+  <div class="frame"></div>
+  <div class="hey script">hungry?</div>
+  <p class="msg">Scan this, pick whatever you're craving, and I'll take care of the rest. Always.</p>
+  <div class="sign script">— Bhai</div>
+  <svg class="mini" viewBox="0 0 140 90"><use href="#goldfish"/></svg>
+  <span class="heart" style="left:43mm;bottom:15mm;font-size:2.2mm">♥</span>
+  <span class="bub" style="left:41.5mm;bottom:19mm;width:1.4mm;height:1.4mm"></span>
+  <div class="qr" id="qr"></div>
+  <div class="qr-cap">scan me ♡</div>
+  <div class="guide"></div>
+</section>
+
+<script src="qrcode.js"></script>
+<script>
+  // The QR points to this site (the folder card.html lives in) unless ?url= is given.
+  const params = new URLSearchParams(location.search);
+  const here = location.href.split(/[?#]/)[0].replace(/card\.html$/, "");
+  const url = params.get("url") || here;
+  const qr = qrcode(0, "M"); qr.addData(url); qr.make();
+  const n = qr.getModuleCount();
+  let d = "";
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += `M${c} ${r}h1v1h-1z`;
+  document.getElementById("qr").innerHTML =
+    `<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges"><path d="${d}" fill="#000B46"/></svg>`;
+  if (params.get("name")) document.getElementById("holder").textContent = params.get("name");
+</script>
+</body>
+</html>

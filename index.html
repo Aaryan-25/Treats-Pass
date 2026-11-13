@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muskan's Treats Pass</title>
+<meta name="theme-color" content="#B5F4FD">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Treats Pass">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bubbles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<main>
+  <!-- The pass -->
+  <section class="pass" aria-label="Your pass">
+    <div class="pass-top">
+      <span class="pass-kicker">a lifetime treats pass for</span>
+      <button class="icon-btn" id="openSettings" aria-label="Settings">⚙︎</button>
+    </div>
+    <span class="holder-name script" id="holderName">Muskan</span>
+    <p class="pass-tag">eat anything, anytime ♡</p>
+    <svg class="pass-fish" viewBox="0 0 140 90" aria-hidden="true">
+      <path d="M100 45 C112 30 124 14 138 8 C132 26 130 36 134 45 C130 54 132 64 138 82 C124 76 112 60 100 45Z" fill="#ffb347"/>
+      <path d="M44 16 C56 0 78 2 84 18 C70 16 56 18 44 16Z" fill="#ffb347"/>
+      <ellipse cx="60" cy="46" rx="46" ry="30" fill="#ff7a1a"/>
+      <path d="M58 68 C62 84 76 84 80 70Z" fill="#ffb347"/>
+      <path d="M74 20 C84 36 84 56 74 72" stroke="#ffb347" stroke-width="3.5" fill="none" opacity=".75"/>
+      <ellipse cx="26" cy="52" rx="7" ry="4.2" fill="#DF8372" opacity=".55"/>
+      <circle cx="34" cy="38" r="8.5" fill="#fff"/><circle cx="32.4" cy="38.6" r="5" fill="#000B46"/><circle cx="30.6" cy="36.4" r="1.8" fill="#fff"/>
+      <path d="M27 29 L24 26 M31 28 L30 24.5 M35.5 28.5 L36 25" stroke="#000B46" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M15 50 C19 54 24 53.5 26 49.5" stroke="#000B46" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="meter" id="meterWrap">
+      <div class="meter-row"><span>Bhai's treat budget</span><strong id="meterText">₹0 / ₹0</strong></div>
+      <div class="meter-bar" id="meterBar"><div id="meterFill"></div></div>
+      <p class="meter-note" id="meterNote" hidden></p>
+    </div>
+  </section>
+
+  <!-- Order -->
+  <section class="panel">
+    <h2 class="script">what are we eating?</h2>
+    <label class="field">
+      <span>Swiggy / Zomato link</span>
+      <div class="paste-row">
+        <input id="link" type="url" inputmode="url" placeholder="Paste the shared link">
+        <button class="ghost" id="pasteBtn" type="button">Paste</button>
+      </div>
+    </label>
+    <label class="field">
+      <span>Roughly how much? (₹)</span>
+      <input id="amount" type="number" inputmode="numeric" min="0" placeholder="450">
+    </label>
+    <label class="field">
+      <span>Anything to tell Bhai? (optional)</span>
+      <input id="notes" type="text" placeholder="2 momos, extra chutney…">
+    </label>
+    <fieldset class="modes">
+      <legend>Who places the order?</legend>
+      <label><input type="radio" name="mode" value="payback" checked><span>I'll order, you pay me back</span></label>
+      <label><input type="radio" name="mode" value="order"><span>Bhai, you order it for me</span></label>
+    </fieldset>
+    <p class="addr-line" id="addrLine"></p>
+    <button class="primary" id="sendBtn">Send to Bhai ♡</button>
+  </section>
+
+  <!-- SOS -->
+  <section class="panel sos-panel">
+    <button class="sos" id="sosBtn">🚨 Need you, Bhai</button>
+    <p class="hint">Hold for a second. Bhai gets a loud, urgent alert right away.</p>
+  </section>
+
+  <!-- History -->
+  <section class="panel">
+    <h2 class="script">recent treats</h2>
+    <ul class="history" id="history"></ul>
+  </section>
+</main>
+
+<!-- Settings sheet -->
+<dialog id="settings">
+  <form method="dialog" class="sheet">
+    <h2 class="script">your details</h2>
+    <p class="hint">Saved only on this phone.</p>
+    <label class="field"><span>Delivery address</span>
+      <textarea id="setAddress" rows="3" placeholder="Flat, building, area, city"></textarea></label>
+    <label class="field"><span>Phone (for delivery)</span>
+      <input id="setPhone" type="tel" placeholder="98xxxxxxxx"></label>
+    <label class="field"><span>Your UPI ID (so Bhai can pay you back)</span>
+      <input id="setUpi" type="text" autocapitalize="off" placeholder="muskan@okaxis"></label>
+    <div class="sheet-actions">
+      <button class="primary" id="saveSettings" value="save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
