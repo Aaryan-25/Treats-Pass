@@ -14,8 +14,8 @@
    - Within the budget: silent notification, no sound.
    - Past the budget: she can still order. You get a normal notification with a sound, marked "over budget".
    - "Need you, Bhai" alert: max priority, with **I'm on it**, **Call**, and her location (if she allows it).
-   - On **iPhone**, allow ntfy *Time Sensitive* notifications so the alert breaks through Focus.
-     On **Android**, open the topic's settings in ntfy and allow it to override Do Not Disturb.
+   - On **Android**, each priority gets its own sound setting, and the alert can be allowed to override Do Not Disturb.
+     On **iPhone**, ntfy can't yet break through silent mode or Focus, so the alert arrives like a normal notification.
 
 ## 3. Your side: Bhai's Desk
 - Open `bhai.html` on your phone with your private link (desk key + her pass code), or open `bhai.html`

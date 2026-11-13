@@ -1,5 +1,5 @@
 // Network-first so your updates on GitHub reach her right away; cache is the offline fallback.
-const CACHE = "treats-pass-v5";
+const CACHE = "treats-pass-v6";
 const SHELL = ["./", "index.html", "style.css", "fonts.css", "bhai.html", "bhai.js", "bhai.css", "app.js", "config.js", "manifest.webmanifest", "icons/icon-192.png"];
 
 self.addEventListener("install", (e) => {

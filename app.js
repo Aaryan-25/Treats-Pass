@@ -7,6 +7,25 @@
   const load = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
+  // ---------- start fresh: wipes everything this app saved on this phone ----------
+  function wipeAndRestart(keepCode) {
+    const keep = keepCode ? load(KEY.code, "") : "";
+    try { Object.keys(localStorage).filter((k) => k.startsWith("eats.")).forEach((k) => localStorage.removeItem(k)); } catch {}
+    try { navigator.serviceWorker?.getRegistrations().then((rs) => rs.forEach((r) => r.unregister())); } catch {}
+    try { caches?.keys().then((ks) => ks.forEach((k) => caches.delete(k))); } catch {}
+    if (keep) save(KEY.code, keep);
+    if (keep && !location.hash.includes("k=")) history.replaceState(null, "", location.pathname + "#k=" + keep);
+    location.reload();
+  }
+  // Opening a new link in an already-open tab only changes the #part, so reload to apply it.
+  window.addEventListener("hashchange", () => location.reload());
+  if (/(^#|&)reset(&|$)/.test(location.hash)) {
+    const k = new URLSearchParams(location.hash.slice(1)).get("k");
+    try { Object.keys(localStorage).filter((x) => x.startsWith("eats.")).forEach((x) => localStorage.removeItem(x)); } catch {}
+    location.replace(location.pathname + (k ? "#k=" + k : ""));
+    return;
+  }
+
   // ---------- secret pass code (from the card's QR link, never from GitHub) ----------
   const cleanCode = (v) => String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   const fromLink = cleanCode(new URLSearchParams(location.hash.slice(1)).get("k"));
@@ -110,6 +129,10 @@
     $("settings").showModal();
   }
   $("openSettings").onclick = openSettings;
+  $("freshBtn").onclick = (e) => {
+    e.preventDefault();
+    if (confirm("Start fresh on this phone? This clears your details, history and budget count here.")) wipeAndRestart(true);
+  };
   $("saveSettings").onclick = () => {
     me = { address: $("setAddress").value.trim(), phone: $("setPhone").value.trim(), upi: $("setUpi").value.trim() };
     save(KEY.me, me); renderAddress(); toast("Saved");
